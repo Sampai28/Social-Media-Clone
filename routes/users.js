@@ -40,7 +40,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-//get a user
+//Getting User Info
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//follow a user
+//Following
 
 router.put("/:id/follow", async (req, res) => {
   if (req.body.userId !== req.params.id) {
@@ -61,19 +61,19 @@ router.put("/:id/follow", async (req, res) => {
       if (!user.followers.includes(req.body.userId)) {
         await user.updateOne({ $push: { followers: req.body.userId } });
         await currentUser.updateOne({ $push: { followings: req.params.id } });
-        res.status(200).json("user has been followed");
+        res.status(200).json("You started following this user.");
       } else {
-        res.status(403).json("you allready follow this user");
+        res.status(403).json("You are already following this user");
       }
     } catch (err) {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("you cant follow yourself");
+    res.status(403).json("Failed!");
   }
 });
 
-//unfollow a user
+//Unfollowing
 
 router.put("/:id/unfollow", async (req, res) => {
     if (req.body.userId !== req.params.id) {
@@ -91,7 +91,7 @@ router.put("/:id/unfollow", async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("you cant unfollow yourself");
+      res.status(403).json("Error!");
     }
   });
 
